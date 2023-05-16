@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from item.models import Category, Item
 from .forms import SignupForm
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -45,3 +47,22 @@ def signup(request):
         form = SignupForm()
 
     return render(request, "core/signup.html", {"form": form})
+
+
+# def logout_user(request):
+#     logout(request)
+
+
+def UserLoggedIn(request):
+    if request.user.is_authenticated == True:
+        username = request.user.username
+    else:
+        username = None
+    return username
+
+
+def logout_view(request):
+    username = UserLoggedIn(request)
+    if username != None:
+        logout(request)
+        return redirect("/")
